@@ -37,11 +37,16 @@ Contained in this Repo are samples how to use Gtk4DotNet. All examples of the of
 ## Prerequisites
 
 ### Ubuntu
+
 * sudo apt install libgtk-4-dev
 
 if you want to use WebView (WebKitGTK):
 
 * sudo apt install libwebkitgtk-6.0-dev
+
+if you want to use GTK resources
+
+* sudo apt install libglib2.0-dev-bin
 
 ## Installation of GTK Schema
 ```
