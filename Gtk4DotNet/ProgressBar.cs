@@ -20,5 +20,4 @@ public static class ProgressBar
 
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_progress_bar_set_fraction", CallingConvention = CallingConvention.Cdecl)]
     extern static void SetFraction(this ProgressBarHandle progressBar, double fraction);
-    
 }
