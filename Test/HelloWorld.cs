@@ -6,7 +6,8 @@ static class HelloWorld
 {
     public static int Run()
         => Application
-            .NewAdwaita("org.gtk.example")
+            .New("org.gtk.example")
+            //.NewAdwaita("org.gtk.example")
             .OnActivate(app => 
                 app
                     .SideEffect(_ => WriteLine($"Gkt theme: {GtkSettings.GetDefault().ThemeName}"))
@@ -24,7 +25,9 @@ static class HelloWorld
                                 .Append(
                                     Button
                                         .NewWithLabel("Maximize Window")
-                                        .OnClicked(() => w.Maximize()))))
+                                        .OnClicked(() => w.Maximize())
+                                        .SetTooltipText("This is a sample Button\tCtrl-H"))))
+
                     .Show())
             .Run(0, IntPtr.Zero);
 }

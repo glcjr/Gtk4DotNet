@@ -50,6 +50,7 @@ public static class Widget
         where THandle : WidgetHandle
         => widget.SideEffect(w => w.SetMarginBottom(margin));
 
+
     [DllImport(Libs.LibGtk, EntryPoint="gtk_widget_hide", CallingConvention = CallingConvention.Cdecl)]
     public extern static void Hide(this WidgetHandle widget);
 
@@ -102,6 +103,10 @@ public static class Widget
     public static THandle VExpand<THandle>(this THandle widget, bool expand)
         where THandle : WidgetHandle
         => widget.SideEffect(w => w.SetVExpand(expand));
+
+    public static THandle SetTooltipText<THandle>(this THandle widget, string text)
+        where THandle : WidgetHandle
+        => widget.SideEffect(w => w._SetTooltipText(text));
 
     public static THandle? GetFirstChild<THandle>(this THandle widget)
         where THandle : WidgetHandle
@@ -245,5 +250,8 @@ public static class Widget
 
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_widget_set_name", CallingConvention = CallingConvention.Cdecl)]
     extern static void SetName(this WidgetHandle widget, string name);
+
+    [DllImport(Libs.LibGtk, EntryPoint="gtk_widget_set_tooltip_text", CallingConvention = CallingConvention.Cdecl)]
+    extern static WidgetHandle _SetTooltipText(this WidgetHandle widget, string text);
 }
 
