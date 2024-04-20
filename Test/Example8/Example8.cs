@@ -7,8 +7,7 @@ static class Example8
 {
     public static int Run()
         => Application
-            //.NewAdwaita("org.gtk.example")
-            .New("org.gtk.example")
+            .NewAdwaita("org.gtk.example")
             .SideEffect(a => settings = Settings.New("org.gtk.exampleapp"))
             .OnActivate(app =>
                 app
@@ -40,17 +39,7 @@ static class Example8
                                     Menu.New()
                                     .AppendItem(MenuItem.New("_Words", "win.show-words"))
                                     .AppendItem(MenuItem.New("_Lines", "win.show-lines"))
-                                    .SubMenu("Submenu", Menu.New()
-                                        .AppendItem(MenuItem.NewSection(null,
-                                            Menu.New()
-                                                .AppendItem(MenuItem.New("_Affen", "win.show-words2"))
-                                                .AppendItem(MenuItem.New("_Schweine", "win.show-words3")))))
                                     .AppendItem(MenuItem.New("_Preferences", "app.preferences"))))
-                                    .SubMenu("Submenu", Menu.New()
-                                        .AppendItem(MenuItem.NewSection(null,
-                                            Menu.New()
-                                                .AppendItem(MenuItem.New("_Affen", "win.show-words2"))
-                                                .AppendItem(MenuItem.New("_Schweine", "win.show-words3")))))
                                 .AppendItem(MenuItem.NewSection(null,
                                     Menu.New()
                                     .AppendItem(MenuItem.New("_Quit", "app.quit"))))))
