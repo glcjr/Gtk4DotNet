@@ -104,9 +104,9 @@ public static class Widget
         where THandle : WidgetHandle
         => widget.SideEffect(w => w.SetVExpand(expand));
 
-    public static THandle SetTooltipText<THandle>(this THandle widget, string text)
+    public static THandle Tooltip<THandle>(this THandle widget, string text)
         where THandle : WidgetHandle
-        => widget.SideEffect(w => w._SetTooltipText(text));
+        => widget.SideEffect(w => w.SetTooltipText(text));
 
     public static THandle? GetFirstChild<THandle>(this THandle widget)
         where THandle : WidgetHandle
@@ -252,6 +252,6 @@ public static class Widget
     extern static void SetName(this WidgetHandle widget, string name);
 
     [DllImport(Libs.LibGtk, EntryPoint="gtk_widget_set_tooltip_text", CallingConvention = CallingConvention.Cdecl)]
-    extern static WidgetHandle _SetTooltipText(this WidgetHandle widget, string text);
+    extern static WidgetHandle SetTooltipText(this WidgetHandle widget, string text);
 }
 

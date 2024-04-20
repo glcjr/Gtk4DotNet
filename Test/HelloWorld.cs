@@ -26,7 +26,7 @@ static class HelloWorld
                                     Button
                                         .NewWithLabel("Maximize Window")
                                         .OnClicked(() => w.Maximize())
-                                        .SetTooltipText("This is a sample Button\tCtrl-H"))))
+                                        .Tooltip("This is a sample Button\tCtrl-H"))))
 
                     .Show())
             .Run(0, IntPtr.Zero);
