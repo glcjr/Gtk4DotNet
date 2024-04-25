@@ -7,7 +7,8 @@ static class Example8
 {
     public static int Run()
         => Application
-            .NewAdwaita("org.gtk.example")
+            //.NewAdwaita("org.gtk.example")
+            .New("org.gtk.example")
             .SideEffect(a => settings = Settings.New("org.gtk.exampleapp"))
             .OnActivate(app =>
                 app
@@ -109,11 +110,11 @@ static class Example8
                     .SideEffect(_ => UpdateWords())
                     .SideEffect(_ => UpdateLines())
                     .Show())
-            .AddActions(new GtkAction[]
-            {
+            .AddActions(
+            [
                 new("preferences", () => new Dialog8.PreferenceDialog().Show(window.Ref, settings)),
                 new("quit", () => window.Ref.CloseWindow(), "<Ctrl>Q")
-            })
+            ])
             .Run(0, IntPtr.Zero);
 
     static FileContent[] GetFiles()
