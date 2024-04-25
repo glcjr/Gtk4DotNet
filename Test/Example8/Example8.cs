@@ -7,8 +7,7 @@ static class Example8
 {
     public static int Run()
         => Application
-            //.NewAdwaita("org.gtk.example")
-            .New("org.gtk.example")
+            .NewAdwaita("org.gtk.example")
             .SideEffect(a => settings = Settings.New("org.gtk.exampleapp"))
             .OnActivate(app =>
                 app

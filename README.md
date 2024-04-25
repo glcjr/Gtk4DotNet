@@ -44,6 +44,10 @@ if you want to use WebView (WebKitGTK):
 
 * sudo apt install libwebkitgtk-6.0-dev
 
+* With LibAdwaita
+
+sudo apt install libadwaita-1-dev
+
 if you want to use GTK resources
 
 * sudo apt install libglib2.0-dev-bin
