@@ -36,7 +36,7 @@ Contained in this Repo are samples how to use Gtk4DotNet. All examples of the of
 
 ## Prerequisites
 
-### Ubuntu
+### Necessary only depending on the version of Linux
 
 if you want to use WebView (WebKitGTK) on Ubuntu 22.04:
 
@@ -46,10 +46,11 @@ With LibAdwaita
 
 * sudo apt install libadwaita-1-dev
 
-Not necessary: 
+Gtk4
 * sudo apt install libgtk-4-dev
 
-if you want to use GTK resources
+### If you want to use GTK resources
+
 * sudo apt install libglib2.0-dev-bin
 
 ## Installation of GTK Schema
