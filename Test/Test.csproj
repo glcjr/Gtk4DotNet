@@ -12,14 +12,14 @@
     <ProjectReference Include="..\Gtk4DotNet\Gtk4DotNet.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <EmbeddedResource Include="resources/resources.gresource">
       <LogicalName>app.gresource</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="cd resources&#xD;&#xA;glib-compile-resources resources.xml" />
-  </Target>
+  </Target> -->
 
   <ItemGroup>
     <EmbeddedResource Include="./icon.png">
