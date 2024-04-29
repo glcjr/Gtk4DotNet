@@ -25,7 +25,8 @@ static class Example3
                             .Model(Menu.New()
                                 .AppendItem(MenuItem.NewSection(null,
                                     Menu.New()
-                                    .AppendItem(MenuItem.New("_Preferences", "app.preferences"))))
+                                    .AppendItem(MenuItem.New("_Preferences", "app.preferences"))
+                                    .AppendItem(MenuItem.New("_Toggle", "app.toggle"))))
                                 .AppendItem(MenuItem.NewSection(null,
                                     Menu.New()
                                     .AppendItem(MenuItem.New("_Quit", "app.quit")))))
@@ -52,11 +53,12 @@ static class Example3
                                                 content.Name, content.Name)
                                             ))))
                         .Show())
-            .AddActions(new GtkAction[]
-            {
+            .AddActions(
+            [
                 new("preferences", () => Console.WriteLine("Preferences")),
+                new("toggle", true, t => Console.WriteLine($"Toggled: {t}"), "<Ctrl>T"),
                 new("quit", () => window.Ref.CloseWindow(), "<Ctrl>Q")
-            })
+            ])
             .Run(0, IntPtr.Zero);
 
     static IEnumerable<FileContent> GetFiles()

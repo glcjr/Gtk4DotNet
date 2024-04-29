@@ -85,14 +85,14 @@ public static class Application
             }
             else 
             {
-                // Delegates.Add(action.StateChanged);
-                // var state = action.StateParameterType == "s" 
-                //     ? NewString(action.State as string)
-                //     : NewBool((bool)action.State == true ? -1 : 0);
-                // var simpleAction = NewStatefulAction(action.Name, action.StateParameterType, state);
-                // action.action = simpleAction;
-                // Gtk.SignalConnect<GtkAction.StateChangedDelegate>(simpleAction, "change-state", action.StateChanged);
-                // AddAction(app, simpleAction);
+                GtkDelegates.Add(action.StateChanged);
+                var state = action.StateParameterType == "s" 
+                    ? NewString(action.State as string ?? "")
+                    : NewBool((bool?)action.State == true ? -1 : 0);
+                var simpleAction = NewStatefulAction(action.Name, action.StateParameterType, state);
+                action.action = simpleAction;
+                Gtk.SignalConnectAction(simpleAction, "change-state", Marshal.GetFunctionPointerForDelegate(action.StateChanged), IntPtr.Zero, 0);
+                AddAction(app, simpleAction);
             }
         }
 
@@ -101,7 +101,7 @@ public static class Application
             .Where(n => n.Accelerator != null)
             .Select(n => new { Name = "app." + n.Name, n.Accelerator});  
         foreach (var accelEntry in accelEntries)
-            SetAccelsForAction(app, accelEntry.Name, new [] { accelEntry.Accelerator, null});
+            SetAccelsForAction(app, accelEntry.Name, [accelEntry.Accelerator, null]);
         return app;
     }
 
@@ -115,19 +115,19 @@ public static class Application
     public extern static void SetAccelsForAction(ApplicationHandle app, string action, [In] string?[] accels);
 
     [DllImport(Libs.LibGtk, EntryPoint="g_simple_action_new", CallingConvention = CallingConvention.Cdecl)]
-    extern static IntPtr NewAction(string action, string? p);
+    extern static nint NewAction(string action, string? p);
 
-    // [DllImport(Libs.LibGtk, EntryPoint="g_simple_action_new_stateful", CallingConvention = CallingConvention.Cdecl)]
-    // public extern static IntPtr NewStatefulAction(string action, string p, IntPtr state);
+    [DllImport(Libs.LibGtk, EntryPoint="g_simple_action_new_stateful", CallingConvention = CallingConvention.Cdecl)]
+    extern static nint NewStatefulAction(string action, string? p, nint state);
 
-    // [DllImport(Libs.LibGtk, EntryPoint="g_variant_new_boolean", CallingConvention = CallingConvention.Cdecl)]
-    // public extern static IntPtr NewBool(int value);
+    [DllImport(Libs.LibGtk, EntryPoint="g_variant_new_boolean", CallingConvention = CallingConvention.Cdecl)]
+    internal extern static IntPtr NewBool(int value);
 
     // [DllImport(Libs.LibGtk, EntryPoint="g_variant_new_int32", CallingConvention = CallingConvention.Cdecl)]
     // public extern static IntPtr NewInt(int value);
 
-    // [DllImport(Libs.LibGtk, EntryPoint="g_variant_new_string", CallingConvention = CallingConvention.Cdecl)]
-    // public extern static IntPtr NewString(string value);
+    [DllImport(Libs.LibGtk, EntryPoint="g_variant_new_string", CallingConvention = CallingConvention.Cdecl)]
+    extern static IntPtr NewString(string value);
 
     [DllImport(Libs.LibGtk, EntryPoint="g_action_map_add_action", CallingConvention = CallingConvention.Cdecl)]
     extern static void AddAction(ApplicationHandle app, IntPtr action);
