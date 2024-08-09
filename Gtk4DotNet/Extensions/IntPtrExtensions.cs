@@ -3,17 +3,8 @@ using CsTools.Extensions;
 
 namespace GtkDotNet.Extensions;
 
-static class IntPtrExtensions
+public static class IntPtrExtensions
 {
-    // TODO free if it has to be freed
-    public static string? PtrToString(this IntPtr obj, bool free)
-    {
-        var val = Marshal.PtrToStringUTF8(obj);
-        if (free)
-            obj.Free();
-        return val ?? "";
-    }
-
     public static THandle With<THandle>(this THandle handle, Action<THandle> action)
         where THandle : SafeHandle
         => handle.SideEffect(action);
@@ -33,4 +24,13 @@ static class IntPtrExtensions
     public static THandle Choose<THandle>(this THandle handle, bool predicate, Action<THandle> trueAction, Action<THandle> falseAction)
         where THandle : SafeHandle
         => handle.SideEffectChoose(predicate, trueAction, falseAction);
+
+    // TODO free if it has to be freed
+    internal static string? PtrToString(this IntPtr obj, bool free)
+    {
+        var val = Marshal.PtrToStringUTF8(obj);
+        if (free)
+            obj.Free();
+        return val ?? "";
+    }
 }
