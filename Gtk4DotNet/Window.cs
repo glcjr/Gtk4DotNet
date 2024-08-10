@@ -31,6 +31,7 @@ public static class Window
     public static WindowHandle NotDecorated(this WindowHandle window)
         => window.SideEffect(w => w._SetDecorated(false));
 
+    [Obsolete("Icon per window is now deprecated in GTK4, especially with Wayland", true)]
     public static WindowHandle ResourceIcon(this WindowHandle window, string resourceIconPath)
     {
         var themeDir = Path.Combine(
@@ -63,8 +64,8 @@ public static class Window
     public static WindowHandle Child(this WindowHandle window, WidgetHandle child)
         => window.SideEffect(w => SetChild(window, child));
 
-    public static WindowHandle OnClose(this WindowHandle window, Func<WindowHandle, bool> closing)
-        => window.SideEffect(a => Gtk.SignalConnect<TwoPointerBoolRetDelegate>(a, "close-request", (_, ___) => closing(window)));
+    public static WindowHandle OnClose(this WindowHandle window, Func<WindowHandle, bool> preventClosing)
+        => window.SideEffect(a => Gtk.SignalConnect<TwoPointerBoolRetDelegate>(a, "close-request", (_, ___) => preventClosing(window)));
 
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_window_move", CallingConvention = CallingConvention.Cdecl)]
     public extern static void Move(this WindowHandle window, int x, int y);
@@ -81,6 +82,7 @@ public static class Window
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_window_is_maximized", CallingConvention = CallingConvention.Cdecl)]
     public extern static bool IsMaximized(this WindowHandle window);
 
+    [Obsolete("Icon per window is now deprecated in GTK4, especially with Wayland", true)]
     public static WindowHandle IconName(this WindowHandle window, string name)
         => window.SideEffect(w => w.SetIconName(name));
 
@@ -123,6 +125,7 @@ public static class Window
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_window_set_default_size", CallingConvention = CallingConvention.Cdecl)]
     extern static void SetDefaultSize(this WindowHandle window, int width, int height);
 
+    [Obsolete("Icon per window is now deprecated in GTK4, especially with Wayland", true)]
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_window_set_icon_name", CallingConvention = CallingConvention.Cdecl)]
     extern static void SetIconName(this WindowHandle window, string name);
 

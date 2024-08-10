@@ -12,7 +12,6 @@ static class Threading
                 app
                     .SideEffect(_ => WriteLine($"Gkt theme: {GtkSettings.GetDefault().ThemeName}"))
                     .NewWindow()
-                    .ResourceIcon("icon")
                     .Title("Hello Threading👍")
                     .DefaultSize(200, 200)
                     .OnClose(_ => false.SideEffect(_ => WriteLine("Window is closing")))

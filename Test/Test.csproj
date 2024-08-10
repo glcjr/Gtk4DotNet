@@ -22,9 +22,6 @@
   </Target> -->
 
   <ItemGroup>
-    <EmbeddedResource Include="./icon.png">
-      <LogicalName>icon</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="./resources/style.css">
       <LogicalName>style</LogicalName>
     </EmbeddedResource>

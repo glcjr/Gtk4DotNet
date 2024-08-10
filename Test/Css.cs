@@ -11,7 +11,6 @@ static class Css
                 app
                     .SideEffect(_ => WriteLine($"Gkt theme: {GtkSettings.GetDefault().ThemeName}"))
                     .NewWindow()
-                    .ResourceIcon("icon")
                     .SideEffect(w => StyleContext
                         .AddProviderForDisplay(Display.GetDefault(), 
                             CssProvider.New()

@@ -11,7 +11,6 @@ static class NotDecorated
                 app
                     .SideEffect(_ => WriteLine($"Gkt theme: {GtkSettings.GetDefault().ThemeName}"))
                     .NewWindow()
-                    .ResourceIcon("icon")
                     .NotDecorated()
                     .Title("Hello Gtk👍")
                     .DefaultSize(200, 200)
