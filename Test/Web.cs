@@ -1,5 +1,6 @@
 using GtkDotNet;
 using CsTools.Extensions;
+using System.Text;
 
 using static System.Console;
 
@@ -13,9 +14,20 @@ static class Web
                     .NewWindow()
                     .Title("Hello Web View👍")
                     .DefaultSize(800, 600)
+                    .SideEffect(_ => {
+                        var context = WebKitWebContext.GetDefault();
+                        context.RegisterUriScheme("my", (request, b) =>
+                        {
+                            var uri = WebKitUriSchemeRequest.GetUri(request);
+                            var html = "<html><body><h1>Hello from my custom scheme!</h1></body></html>";
+                            var stream = MemoryInputStream.New(Encoding.UTF8.GetBytes(html));
+                            WebKitUriSchemeRequest.Finish(request, stream, html.Length, "text/html");
+                        });
+                    })
                     .Child(
                         WebKit
                             .New()
+                            .LoadUri($"my://google.de")
                             .SideEffect(wk => 
                                 wk.AddController(
                                 EventControllerKey
@@ -50,13 +62,12 @@ static class Web
                             .OnLoadChanged((w, e) => 
                                 e.SideEffectIf(e == WebViewLoad.Finished, 
                                     _ => w.RunJavascript("console.log('called from C#')")))
-                            .DisableContextMenu()
+                            //.DisableContextMenu()
                             .OnAlert((w, text) => 
                                 text
                                     .SideEffectIf(text == "showDevTools",
                                         _ => w.GetInspector().Show())
                                     .SideEffect(text => WriteLine($"on alert: {text}")))
-                            .LoadUri($"file://{Directory.GetCurrentDirectory()}/webroot/index.html")
                     )
                     .Show())
             .Run(0, IntPtr.Zero);

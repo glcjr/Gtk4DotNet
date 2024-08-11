@@ -4,6 +4,7 @@ using CsTools.Extensions;
 using GtkDotNet;
 
 public delegate void ProgressCallback(long current, long total);
+public delegate void CustomSchemeRequestDelegate(nint request, nint _);
 
 delegate void OnePointerDelegate(IntPtr p);
 delegate void TwoPointerDelegate(IntPtr p, IntPtr pp);
