@@ -13,5 +13,5 @@ public static class WebKitUriSchemeRequest
     extern static IntPtr _GetUri(IntPtr context);
 
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_uri_scheme_request_finish", CallingConvention = CallingConvention.Cdecl)]
-    public extern static IntPtr Finish(IntPtr rek, InputStreamHandle html, long length, string content);
+    public extern static void Finish(IntPtr request, InputStreamHandle stream, long length, string content);
 }
