@@ -20,8 +20,11 @@ static class Web
                         {
                             var uri = WebKitUriSchemeRequest.GetUri(request);
                             var html = "<html><body><h1>Hello from my custom scheme!</h1></body></html>";
-                            var stream = MemoryInputStream.New(Encoding.UTF8.GetBytes(html));
+                            var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
+                            var stream = MemoryInputStream.New(bytes);
                             WebKitUriSchemeRequest.Finish(request, stream, html.Length, "text/html");
+                            stream.Dispose();
+                            bytes.Dispose();
                         });
                     })
                     .Child(
