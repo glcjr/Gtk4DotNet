@@ -6,7 +6,6 @@ using static System.Console;
 using GtkDotNet.SafeHandles;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Reflection.Metadata;
 
 static class Web
 {
