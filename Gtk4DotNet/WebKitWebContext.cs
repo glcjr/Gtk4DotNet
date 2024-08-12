@@ -9,7 +9,10 @@ public static class WebKitWebContext
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_web_context_get_default", CallingConvention = CallingConvention.Cdecl)]
     public extern static WebKitWebContextHandle GetDefault();
 
-    public static WebKitWebContextHandle RegisterUriScheme(this WebKitWebContextHandle context, string scheme, CustomSchemeRequestDelegate callback)
+    public static WebKitWebContextHandle RegisterUriScheme(this WebKitWebContextHandle context, string scheme, Action<WebkitUriSchemeRequestHandle> callback)
+        => context._RegisterUriScheme(scheme, request => callback(new WebkitUriSchemeRequestHandle(request)));
+                        
+    static WebKitWebContextHandle _RegisterUriScheme(this WebKitWebContextHandle context, string scheme, CustomSchemeRequestDelegate callback)
     {
         GtkDelegates.Add(callback);
         return context.SideEffect(c => c.RegisterUriScheme(scheme, Marshal.GetFunctionPointerForDelegate((Delegate)callback)));

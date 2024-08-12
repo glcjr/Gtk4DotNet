@@ -16,13 +16,16 @@ static class Web
                     .DefaultSize(800, 600)
                     .SideEffect(_ => {
                         var context = WebKitWebContext.GetDefault();
-                        context.RegisterUriScheme("my", (request, b) =>
+                        context.RegisterUriScheme("my", request =>
                         {
-                            var uri = WebKitUriSchemeRequest.GetUri(request);
+                            var uri = request.GetUri();
                             var html = "<html><body><h1>Hello from my custom scheme!</h1></body></html>";
                             var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
                             var stream = MemoryInputStream.New(bytes);
-                            WebKitUriSchemeRequest.Finish(request, stream, html.Length, "text/html");
+                            var headers = request.GetHttpHeaders().Get();
+                            foreach (var header in headers)
+                                WriteLine($"{header}");
+                            request.Finish(stream, html.Length, "text/html");
                             stream.Dispose();
                             bytes.Dispose();
                         });

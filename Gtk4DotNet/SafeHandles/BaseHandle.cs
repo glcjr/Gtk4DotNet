@@ -7,6 +7,9 @@ public abstract class BaseHandle : SafeHandleZeroOrMinusOneIsInvalid
     public BaseHandle()
         : base(ownsHandle: true) { }
 
+    public BaseHandle(nint handle)
+        : base(ownsHandle: true) => this.handle = handle;
+    
     protected override bool ReleaseHandle() => true;
     //     => NativeMethods.CloseHandle(handle);
 
