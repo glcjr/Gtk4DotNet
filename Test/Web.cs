@@ -3,6 +3,7 @@ using CsTools.Extensions;
 using System.Text;
 
 using static System.Console;
+using GtkDotNet.SafeHandles;
 
 static class Web
 {
@@ -14,26 +15,13 @@ static class Web
                     .NewWindow()
                     .Title("Hello Web View👍")
                     .DefaultSize(800, 600)
-                    .SideEffect(_ => {
-                        var context = WebKitWebContext.GetDefault();
-                        context.RegisterUriScheme("my", request =>
-                        {
-                            var uri = request.GetUri();
-                            var html = "<html><body><h1>Hello from my custom scheme!</h1></body></html>";
-                            var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
-                            var stream = MemoryInputStream.New(bytes);
-                            var headers = request.GetHttpHeaders().Get();
-                            foreach (var header in headers)
-                                WriteLine($"{header}");
-                            request.Finish(stream, html.Length, "text/html");
-                            stream.Dispose();
-                            bytes.Dispose();
-                        });
-                    })
+                    .SideEffect(_ => WebKitWebContext
+                                        .GetDefault()
+                                        .RegisterUriScheme("my", ServeCustomRequest))
                     .Child(
                         WebKit
                             .New()
-                            .LoadUri($"my://google.de")
+                            .LoadUri($"my://index")
                             .SideEffect(wk => 
                                 wk.AddController(
                                 EventControllerKey
@@ -77,6 +65,49 @@ static class Web
                     )
                     .Show())
             .Run(0, IntPtr.Zero);
+
+    static void ServeCustomRequest(WebkitUriSchemeRequestHandle request)
+    {
+        var uri = request.GetUri();
+        if (uri == "my://index")
+        {
+            var html = "<html><body><h1>Hello from my custom scheme!</h1><div><video controls><source src='my://video/2010.mp4' type='video/mp4'>Your browser does not support the video tag.</video></div><div><img src='pic.jpg'/></div></body></html>";
+            var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
+            var stream = MemoryInputStream.New(bytes);
+            var headers = request.GetHttpHeaders().Get();
+            foreach (var header in headers)
+                WriteLine($"{header}");
+            request.Finish(stream, html.Length, "text/html");
+            stream.Dispose();
+            bytes.Dispose();
+        }
+        else if (uri == "my://video.mp4")
+        {
+            var html = "<html><body><h1>Hello from my custom scheme!</h1><div><video controls autoplay src='my://video'></video></div><div></body></html>";
+            var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
+            var stream = MemoryInputStream.New(bytes);
+            var headers = request.GetHttpHeaders().Get();
+            foreach (var header in headers)
+                WriteLine($"{header}");
+            request.Finish(stream, html.Length, "text/html");
+            stream.Dispose();
+            bytes.Dispose();
+        }
+        else if (uri == "my://index/pic.jpg")
+        {
+            var res = Resources.Get("image");
+            var bytes = new byte[res?.Length ?? 0];
+            res?.Read(bytes, 0, bytes.Length);
+            var gbytes = GBytes.New(bytes);
+            var stream = MemoryInputStream.New(gbytes);
+            var headers = request.GetHttpHeaders().Get();
+            foreach (var header in headers)
+                WriteLine($"{header}");
+            request.Finish(stream, bytes.Length, "image/jpg");
+            stream.Dispose();
+            gbytes.Dispose();
+        }
+    }
 }
 
 
