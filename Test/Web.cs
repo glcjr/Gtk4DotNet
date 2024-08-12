@@ -17,7 +17,8 @@ static class Web
                     .DefaultSize(800, 600)
                     .SideEffect(_ => WebKitWebContext
                                         .GetDefault()
-                                        .RegisterUriScheme("my", ServeCustomRequest))
+                                        .RegisterUriScheme("my", ServeCustomRequest)
+                                        .RegisterUriScheme("request", ServeRequest))
                     .Child(
                         WebKit
                             .New()
@@ -66,12 +67,50 @@ static class Web
                     .Show())
             .Run(0, IntPtr.Zero);
 
+    static void ServeRequest(WebkitUriSchemeRequestHandle request)
+    {
+        var uri = request.GetUri();
+        var stream = request.GetHttpBody();
+        stream.Dispose();
+        var affe = 0;
+    }
+
     static void ServeCustomRequest(WebkitUriSchemeRequestHandle request)
     {
         var uri = request.GetUri();
         if (uri == "my://index")
         {
-            var html = "<html><body><h1>Hello from my custom scheme!</h1><div><video controls><source src='my://video/2010.mp4' type='video/mp4'>Your browser does not support the video tag.</video></div><div><img src='pic.jpg'/></div></body></html>";
+            var html = 
+@"
+            <html>
+                <body>
+                    <h1>Hello from my custom scheme!</h1>
+                    <div>
+                        <video controls><source src='my://video/2010.mp4' type='video/mp4'>Your browser does not support the video tag.</video>
+                    </div>
+                    <div>
+                        <img src='pic.jpg'/>
+                    </div>
+                    <div>
+                        <button id='button'>Request</button>
+                    </div>
+                    <script>
+                        const b = document.getElementById('button')
+                        const data = {
+                            name: 'Uwe Riegel',
+                            id: 9865
+                        }
+                        b.onclick = () => {
+                            fetch('request://eineMethode', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(data)
+                                }
+                            )}
+                    </script>
+                </body>
+            </html>
+";
             var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
             var stream = MemoryInputStream.New(bytes);
             var headers = request.GetHttpHeaders().Get();
@@ -83,7 +122,7 @@ static class Web
         }
         else if (uri == "my://video.mp4")
         {
-            var html = "<html><body><h1>Hello from my custom scheme!</h1><div><video controls autoplay src='my://video'></video></div><div></body></html>";
+            var html = "<html><body><h1>Hello from my custom scheme!</h1><div><video controls autoplay src='my://video'></video></div><div><button id='req'></div></body></html>";
             var bytes = GBytes.New(Encoding.UTF8.GetBytes(html));
             var stream = MemoryInputStream.New(bytes);
             var headers = request.GetHttpHeaders().Get();

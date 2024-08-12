@@ -15,6 +15,9 @@ public static class WebKitUriSchemeRequest
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_uri_scheme_request_get_http_headers", CallingConvention = CallingConvention.Cdecl)]
     public extern static SoupMessageHeadersHandle GetHttpHeaders(this WebkitUriSchemeRequestHandle request);
 
+    [DllImport(Libs.LibWebKit, EntryPoint = "webkit_uri_scheme_request_get_http_body", CallingConvention = CallingConvention.Cdecl)]
+    public extern static InputStreamHandle GetHttpBody(this WebkitUriSchemeRequestHandle request);
+
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_uri_scheme_request_get_uri", CallingConvention = CallingConvention.Cdecl)]
     extern static IntPtr _GetUri(WebkitUriSchemeRequestHandle request);
 }
