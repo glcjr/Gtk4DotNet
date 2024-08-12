@@ -4,6 +4,9 @@ using System.Text;
 
 using static System.Console;
 using GtkDotNet.SafeHandles;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Reflection.Metadata;
 
 static class Web
 {
@@ -67,12 +70,22 @@ static class Web
                     .Show())
             .Run(0, IntPtr.Zero);
 
+    static readonly JsonSerializerOptions defaults = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     static void ServeRequest(WebkitUriSchemeRequestHandle request)
     {
         var uri = request.GetUri();
-        var stream = request.GetHttpBody();
-        stream.Dispose();
-        var affe = 0;
+        using var stream = request.GetHttpBody();
+        var bytes = GBytes.New(Encoding.UTF8.GetBytes("128"));
+        using var gstream = MemoryInputStream.New(bytes);
+        request.Finish(gstream, 3, "text/html");
+        
+        var test = JsonSerializer.Deserialize<Test>(stream, defaults);
+        var t = test;
     }
 
     static void ServeCustomRequest(WebkitUriSchemeRequestHandle request)
@@ -100,13 +113,15 @@ static class Web
                             name: 'Uwe Riegel',
                             id: 9865
                         }
-                        b.onclick = () => {
-                            fetch('request://eineMethode', {
+                        b.onclick = async () => {
+                            const res = await fetch('request://eineMethode', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify(data)
-                                }
-                            )}
+                                })
+                            const text = await res.text()
+                            console.log('reqId', text)
+                        }
                     </script>
                 </body>
             </html>
@@ -150,3 +165,4 @@ static class Web
 }
 
 
+record Test(string Name, int Id);
