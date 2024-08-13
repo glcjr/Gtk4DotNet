@@ -21,10 +21,14 @@ static class Web
                                         .GetDefault()
                                         .RegisterUriScheme("my", ServeCustomRequest)
                                         .RegisterUriScheme("request", ServeRequest))
+                                        //.GetSecurityManager()
+//                                        .RegisterUriSchemeAsCorsEnabled("my")
+//                                        .RegisterUriSchemeAsCorsEnabled("request"))
                     .Child(
                         WebKit
                             .New()
                             .LoadUri($"my://index")
+                            //.LoadUri($"http://localhost:5173")
                             .SideEffect(wk => 
                                 wk.AddController(
                                 EventControllerKey
@@ -78,10 +82,25 @@ static class Web
     static void ServeRequest(WebkitUriSchemeRequestHandle request)
     {
         var uri = request.GetUri();
+        var method = request.GetHttpMethod();
+
+        var headers = request.GetHttpHeaders().Get();
+        foreach (var header in headers)
+            WriteLine($"{header}");
+
         using var stream = request.GetHttpBody();
         var bytes = GBytes.New(Encoding.UTF8.GetBytes("128"));
         using var gstream = MemoryInputStream.New(bytes);
-        request.Finish(gstream, 3, "text/html");
+
+        using var response = WebKitUriSchemeResponse.New(gstream, 3);
+        using var respondHeaders = SoupMessageHeaders.New(SoupMessageHeaderType.Response);
+        respondHeaders.Set([new("Access-Control-Allow-Origin", "*")]);
+        response
+            .HttpHeaders(respondHeaders)
+            .Status(200, "OK");
+        request.Finish(response);
+
+        //request.Finish(gstream, 3, "text/html");
         
         var test = JsonSerializer.Deserialize<Test>(stream, defaults);
         var t = test;
