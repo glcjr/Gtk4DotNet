@@ -62,24 +62,29 @@ static class WebExtended
                                     _ => w.RunJavascript("console.log('called from C#')")))
                             .DisableContextMenu()
                             .Pipe(w => w.AddController(GestureClick.New().OnPressed((i, x, y) => {
-                                var device = w.GetDisplay().GetDefaultSeat().GetDevice();
-                                var was = device.GetSource();
-                                //using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
-                                using var provider = ContentProvider.NewFileUris([
-                                        "/home/uwe/Projekte/Schrott",
-                                        "/home/uwe/Kündigungen.txt"
-                                        ]);
-                                var surface = w.GetNative().GetSurface();
-                                var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
-                                drag.DragAndDropFinished(success =>
-                                {
-                                    WriteLine($"Drag and drop finished: {success}");
-                                    drag.Dispose();
-                                });
+                                WebExtended.x = x;
+                                WebExtended.y = y;
+                                WriteLine($"Drag and drop started");
                             })))
                             .OnAlert((w, text) => 
                                 text
                                     .SideEffectIf(text == "showDevTools", _ => w.GetInspector().Show())
+                                    .SideEffectIf(text == "dragstart", _ => {
+                                        var device = w.GetDisplay().GetDefaultSeat().GetDevice();
+                                        var was = device.GetSource();
+                                        //using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
+                                        using var provider = ContentProvider.NewFileUris([
+                                                "/home/uwe/Projekte/Schrott",
+                                                "/home/uwe/Kündigungen.txt"
+                                                ]);
+                                        var surface = w.GetNative().GetSurface();
+                                        var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
+                                        drag.DragAndDropFinished(success =>
+                                        {
+                                            WriteLine($"Drag and drop finished: {success}");
+                                            drag.Dispose();
+                                        });
+                                    })
                                     .SideEffect(text => WriteLine($"on alert: {text}")))
                     )
                     .Show())
@@ -161,8 +166,15 @@ static class WebExtended
                             const text = await res.text()
                             console.log('reqId', text)
                         }
-                        // const drag = document.getElementById('drag')
-                        // drag.onmousedown = () => alert('dragstart')
+                        const drag = document.getElementById('drag')
+                        drag.onmousedown = () => {
+                            alert('dragstart')
+                            function mouseup() {
+                                alert('mouseup')
+                                document.removeEventListener('mouseup', mouseup)
+                            }
+                            document.addEventListener('mouseup', mouseup)
+                        }
                     </script>
                 </body>
             </html>
@@ -203,8 +215,10 @@ static class WebExtended
             gbytes.Dispose();
         }
     }
+
+    static double x = 0;
+    static double y = 0;
 }
 
 record Test(string Name, int Id);
 
-// TODO DragBeginw with UriFiles
