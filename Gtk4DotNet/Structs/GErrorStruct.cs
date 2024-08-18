@@ -1,6 +1,6 @@
-using System.Runtime.InteropServices;
-
 namespace GtkDotNet;
+
+using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Sequential)]
 struct GErrorStruct  

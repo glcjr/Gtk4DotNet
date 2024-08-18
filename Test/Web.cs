@@ -64,10 +64,25 @@ static class Web
                                 e.SideEffectIf(e == WebViewLoad.Finished, 
                                     _ => w.RunJavascript("console.log('called from C#')")))
                             //.DisableContextMenu()
+                            .Pipe(w => w.AddController(GestureClick.New().OnPressed((i, x, y) => {
+                                var device = w.GetDisplay().GetDefaultSeat().GetDevice();
+                                var was = device.GetSource();
+                                using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
+                                var surface = w.GetNative().GetSurface();
+                                using var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
+                                var affe = 0;
+                            })))
                             .OnAlert((w, text) => 
                                 text
-                                    .SideEffectIf(text == "showDevTools",
-                                        _ => w.GetInspector().Show())
+                                    .SideEffectIf(text == "showDevTools", _ => w.GetInspector().Show())
+                                    .SideEffectIf(text == "dragstart", _ => 
+                                    {
+
+//                                        var buttonEvent = evt.ToEventButton();
+
+
+                                        var affe = 9;
+                                    })
                                     .SideEffect(text => WriteLine($"on alert: {text}")))
                     )
                     .Show())
@@ -114,6 +129,14 @@ static class Web
             var html = 
 @"
             <html>
+                <head>
+                <style>
+                    #drag  {
+                        width: 200px;
+                        height: 100px;
+                        background-color: chartreuse;
+                    }                
+                </style>
                 <body>
                     <h1>Hello from my custom scheme!</h1>
                     <div>
@@ -125,6 +148,7 @@ static class Web
                     <div>
                         <button id='button'>Request</button>
                     </div>
+                    <div id='drag'></div>
                     <script>
                         const b = document.getElementById('button')
                         const data = {
@@ -140,6 +164,8 @@ static class Web
                             const text = await res.text()
                             console.log('reqId', text)
                         }
+                        // const drag = document.getElementById('drag')
+                        // drag.onmousedown = () => alert('dragstart')
                     </script>
                 </body>
             </html>

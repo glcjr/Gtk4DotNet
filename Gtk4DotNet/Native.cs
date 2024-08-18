@@ -7,5 +7,5 @@ namespace GtkDotNet;
 public static class Native
 {
     [DllImport(Libs.LibGtk, EntryPoint = "gtk_native_get_surface", CallingConvention = CallingConvention.Cdecl)]
-    public extern static SurfaceHandle GetSurface(NativeHandle native);
+    public extern static SurfaceHandle GetSurface(this NativeHandle native);
 }
