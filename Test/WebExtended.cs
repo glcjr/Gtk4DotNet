@@ -66,7 +66,12 @@ static class WebExtended
                                 var was = device.GetSource();
                                 using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
                                 var surface = w.GetNative().GetSurface();
-                                using var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
+                                var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
+                                drag.DragAndDropFinished(success =>
+                                {
+                                    WriteLine($"Drag and drop finished: {success}");
+                                    drag.Dispose();
+                                });
                             })))
                             .OnAlert((w, text) => 
                                 text
@@ -198,5 +203,4 @@ static class WebExtended
 
 record Test(string Name, int Id);
 
-// TODO OnDrag End event
 // TODO DragBeginw with UriFiles

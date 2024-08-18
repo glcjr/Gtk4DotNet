@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using CsTools.Extensions;
 using GtkDotNet;
+using GtkDotNet.SafeHandles;
 
 public delegate void ProgressCallback(long current, long total);
 public delegate void CustomSchemeRequestDelegate(nint request);
@@ -19,6 +20,7 @@ delegate void TwoLongAndPtrCallback(long current, long total, IntPtr zero);
 delegate bool BoolRetDelegate();
 delegate bool OnePointerBoolRetDelegate(IntPtr p);
 delegate bool TwoPointerBoolRetDelegate(IntPtr p, IntPtr pp);
+delegate void PointerBoolDelegate(nint _, bool success);
 
 public static class GtkDelegates
 {

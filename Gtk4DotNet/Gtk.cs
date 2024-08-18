@@ -107,7 +107,7 @@ public static class Gtk
             new GtkSynchronizationContext()
                 .SideEffect(_ => mainThreadId = Environment.CurrentManagedThreadId));
 
-    internal static long SignalConnect<TDelegate>(ObjectHandle obj, string name, TDelegate callback)
+    internal static long SignalConnect<TDelegate>(this ObjectHandle obj, string name, TDelegate callback)
         where TDelegate : Delegate
     {
         // TODO Signal disconnect
