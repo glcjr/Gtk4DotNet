@@ -64,7 +64,11 @@ static class WebExtended
                             .Pipe(w => w.AddController(GestureClick.New().OnPressed((i, x, y) => {
                                 var device = w.GetDisplay().GetDefaultSeat().GetDevice();
                                 var was = device.GetSource();
-                                using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
+                                //using var provider = ContentProvider.NewString(GType.String, "Das ist ein Text");
+                                using var provider = ContentProvider.NewFileUris([
+                                        "/home/uwe/Projekte/Schrott",
+                                        "/home/uwe/Kündigungen.txt"
+                                        ]);
                                 var surface = w.GetNative().GetSurface();
                                 var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
                                 drag.DragAndDropFinished(success =>

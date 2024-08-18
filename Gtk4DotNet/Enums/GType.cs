@@ -1,6 +1,6 @@
 namespace GtkDotNet;
 
-public enum GType
+public enum GType: long
 {
     String = 64
 }
