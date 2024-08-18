@@ -5,9 +5,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<Version>6.4.0</Version>
-	<FileVersion>6.4.0.0</FileVersion>
-	<AssemblyVersion>6.4.0.0</AssemblyVersion>
+	<Version>6.5.0</Version>
+	<FileVersion>6.5.0.0</FileVersion>
+	<AssemblyVersion>6.5.0.0</AssemblyVersion>
 	<AssemblyName>Gtk4DotNet</AssemblyName>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
@@ -16,8 +16,8 @@
 	<PackageProjectUrl>https://github.com/uriegel/Gtk4DotNet</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageTags>DotNet GTK4</PackageTags>
-	<PackageReleaseNotes>Stateful actions</PackageReleaseNotes>
+	<PackageTags>DotNet;.NET;C#;CSharp;Gtk4;Gtk;P/Invoke</PackageTags>
+	<PackageReleaseNotes>BeginDrag in WebView</PackageReleaseNotes>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
