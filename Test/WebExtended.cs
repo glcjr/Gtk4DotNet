@@ -79,6 +79,11 @@ static class WebExtended
                                             WriteLine($"Drag and drop finished: {success}");
                                             drag.Dispose();
                                         });
+                                        drag.DragAndDropCancelled(reason =>
+                                        {
+                                            WriteLine($"Drag and drop cancelled: {reason}");
+                                            drag.Dispose();
+                                        });
                                     })
                                     .SideEffect(text => WriteLine($"on alert: {text}")))
                     )

@@ -20,7 +20,8 @@ delegate void TwoLongAndPtrCallback(long current, long total, IntPtr zero);
 delegate bool BoolRetDelegate();
 delegate bool OnePointerBoolRetDelegate(IntPtr p);
 delegate bool TwoPointerBoolRetDelegate(IntPtr p, IntPtr pp);
-delegate void PointerBoolDelegate(nint _, bool success);
+delegate void PointerBoolDelegate(nint _, bool b);
+delegate void PointerIntDelegate(nint _, int i);
 
 public static class GtkDelegates
 {
