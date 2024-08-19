@@ -61,11 +61,6 @@ static class WebExtended
                                 e.SideEffectIf(e == WebViewLoad.Finished, 
                                     _ => w.RunJavascript("console.log('called from C#')")))
                             .DisableContextMenu()
-                            .Pipe(w => w.AddController(GestureClick.New().OnPressed((i, x, y) => {
-                                WebExtended.x = x;
-                                WebExtended.y = y;
-                                WriteLine($"Drag and drop started");
-                            })))
                             .OnAlert((w, text) => 
                                 text
                                     .SideEffectIf(text == "showDevTools", _ => w.GetInspector().Show())
@@ -78,7 +73,7 @@ static class WebExtended
                                                 "/home/uwe/Kündigungen.txt"
                                                 ]);
                                         var surface = w.GetNative().GetSurface();
-                                        var drag = surface.DragBegin(device, provider, DragAction.Copy, x, y);
+                                        var drag = surface.DragBegin(device, provider, DragAction.Copy, 0.0, 0.0);
                                         drag.DragAndDropFinished(success =>
                                         {
                                             WriteLine($"Drag and drop finished: {success}");
@@ -215,9 +210,6 @@ static class WebExtended
             gbytes.Dispose();
         }
     }
-
-    static double x = 0;
-    static double y = 0;
 }
 
 record Test(string Name, int Id);
