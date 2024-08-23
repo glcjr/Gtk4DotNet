@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using GtkDotNet.SafeHandles;
 using CsTools.Extensions;
+using System.Drawing;
 
 namespace GtkDotNet;
 
@@ -54,6 +55,16 @@ public static class WebKit
 
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_web_view_get_inspector", CallingConvention = CallingConvention.Cdecl)]
     public extern static WebInspectorHandle GetInspector(this WebViewHandle webView);
+
+    public static WebViewHandle BackgroundColor(this WebViewHandle webView, Color color)
+    {
+        var rgba = GtkRgba.FromColor(color);
+        webView.SetBackgroundColor(ref rgba);
+        return webView;
+    }
+
+    [DllImport(Libs.LibWebKit, EntryPoint = "webkit_web_view_set_background_color", CallingConvention = CallingConvention.Cdecl)]
+    extern static void SetBackgroundColor(this WebViewHandle webView,  ref GtkRgba rgba);
 
     [DllImport(Libs.LibWebKit, EntryPoint = "webkit_web_view_evaluate_javascript", CallingConvention = CallingConvention.Cdecl)]
     extern static void EvaluateJavascript(this WebViewHandle webView, string script, int _, IntPtr __, IntPtr ___, IntPtr ____, IntPtr callback, IntPtr _____);
