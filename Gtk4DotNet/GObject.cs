@@ -66,8 +66,14 @@ public static class GObject
         where THandle : ObjectHandle
         => widget.SideEffect(w => Gtk.SignalConnect<ThreePointerDelegate>(w, $"notify::{property}", (IntPtr _, IntPtr __, IntPtr ___)  => onNotify(widget)));
 
+
+    internal static void Unref(IntPtr obj)
+    {
+        Console.WriteLine("Unreffe");
+    }
+
     [DllImport(Libs.LibGtk, EntryPoint="g_object_unref", CallingConvention = CallingConvention.Cdecl)]
-    internal extern static void Unref(IntPtr obj);
+    internal extern static void Unref123(IntPtr obj);
 
     [DllImport(Libs.LibGtk, EntryPoint="g_free", CallingConvention = CallingConvention.Cdecl)]
     public extern static void Free(this IntPtr obj);
