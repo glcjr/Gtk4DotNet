@@ -8,7 +8,7 @@ public class GError
     internal static GError New(GErrorStruct error, string source)
         => error.Domain switch
         {
-            236 or 232 => FileError.Create(error, source),
+            236 or 232 or 205 => FileError.Create(error, source),
             _ => new GError(error)
         };
 
